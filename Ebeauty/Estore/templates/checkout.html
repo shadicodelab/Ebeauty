@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="checkout-title">Checkout</h1>
+
+{% if cart.cart_items.exists %}
+    <div class="checkout-container">
+        <table class="checkout-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.cart_items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>Ksh {{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>Ksh {{ item.item_total_price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            <p><strong>Total Price: </strong>Ksh {{ total_price }}</p>
+        </div>
+
+        <div class="payment-buttons">
+            <a href="{% url 'mpesa_payment' %}" class="proceed-btn">Proceed to Payment</a>
+            <a href="{% url 'place_order' %}" class="place-order-btn">Place Order</a>
+        </div>
+    </div>
+{% else %}
+    <p class="empty-cart-message">Your cart is empty. Please add some items to proceed.</p>
+{% endif %}
+{% endblock %}

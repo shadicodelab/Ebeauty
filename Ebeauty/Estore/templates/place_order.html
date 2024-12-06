@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="order-section">
+    <div class="order-container">
+        <h1 class="order-title">Place Your Order</h1>
+
+        <form method="POST" class="order-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="place-order-btn">Place Order</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

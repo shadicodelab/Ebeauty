@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Homepage - Beauty & Cosmetics{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h2>Discover Your True Glow</h2>
+        <p>Explore our exclusive range of beauty and cosmetic products tailored for your radiant self.</p>
+        <a href="#products" class="btn">Shop Now</a>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="products-section">
+    <h2>Our Products</h2>
+    <div class="product-grid">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.id %}" class="product-card-link">
+            <div class="product-card">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                <div class="details-overlay">Details</div> <!-- Overlay added here -->
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:10 }}</p>
+                <p class="price">Ksh {{ product.price }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

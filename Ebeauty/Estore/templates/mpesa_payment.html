@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="payment-container">
+    <h1 class="payment-title">MPesa Payment</h1>
+
+    <p class="payment-description">Please click the button below to complete your payment:</p>
+
+    <form method="POST" class="payment-form">
+        {% csrf_token %}
+        <button type="submit" class="pay-btn">Pay with MPesa</button>
+    </form>
+</div>
+{% endblock %}

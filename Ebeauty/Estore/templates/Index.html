@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monarq Naturals</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Natural Wellness, Redefined</h1>
+            <p>Discover the essence of organic living with Monarq Naturals – your partner in sustainable and eco-friendly products.</p>
+            <a href="{% url 'register' %}">Shop now</a>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="services">
+        <h2>Our Featured Offerings</h2>
+        <div class="service-icons">
+            <div class="icon">
+                <img src="https://img.icons8.com/?size=100&id=20873&format=png&color=000000" alt="Service 1">
+                <p>Organic Skincare</p>
+            </div>
+            <div class="icon">
+                <img src="https://img.icons8.com/?size=100&id=7KS6WsfvzQE0&format=png&color=000000" alt="Service 2">
+                <p>Eco-Friendly Haircare</p>
+            </div>
+            <div class="icon">
+                <img src="https://img.icons8.com/?size=100&id=Zq0pVVhwkNxK&format=png&color=000000" alt="Service 3">
+                <p>Wellness Solutions</p>
+            </div>
+            <div class="icon">
+                <img src="https://img.icons8.com/?size=100&id=5KDYkVnn6i0q&format=png&color=000000" alt="Service 4">
+                <p>Holistic Healing</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

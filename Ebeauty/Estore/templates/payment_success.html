@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Payment Successful!</h1>
+
+<p>Your payment has been successfully processed. Here are your order details:</p>
+
+<div class="order-details">
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+    <p><strong>Total Price:</strong> Ksh {{ order.total_price }}</p>
+    <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+    
+    <h3>Items in Your Order:</h3>
+    <ul>
+        {% for item in order.cart.cart_items.all %}
+        <li>
+            {{ item.product.name }} - Ksh {{ item.product.price }} x {{ item.quantity }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<a href="{% url 'homepage' %}">Back to Homepage</a>
+{% endblock %}

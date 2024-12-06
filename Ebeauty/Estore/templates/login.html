@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The Monarq natrals</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="{% static 'css/account.css' %}" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <div class="wrapper">
+    <div>
+        <h1>The Monarq natrals</h1>
+    </div>
+    <div>
+        <h1>LOGIN TO SHOP</h1>
+        {% if message %}
+            <div><h2 style="color: red; font-size: 20px;">{{ message }}</h2></div>
+        {% endif %}
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="input-box">
+                <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="input-box">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <input class="btn" id="submitbutton" type="submit" value="Login">
+        </form>
+        <div class="register-link">
+          <p>Don't have an account? <a href="{% url 'register' %}">Register here.</a></p>
+        </div>
+    </div>
+  </div>
+</body>
+</html>

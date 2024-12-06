@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="product-detail-section">
+    <div class="product-detail-container">
+        <div class="product-image">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">Price: Ksh {{ product.price }}</p>
+            <p class="description">{{ product.description }}</p>
+            <p class="stock">Available Stock: {{ product.stock }}</p>
+            
+            {% if product.stock > 0 %}
+            <a href="{% url 'add_to_cart' product.id %}" class="btn">Add to Cart</a>
+            {% else %}
+            <p class="out-of-stock">Out of Stock</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

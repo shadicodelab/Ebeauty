@@ -1,0 +1,49 @@
+<!-- Cart Page -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="cart-title">Your Cart</h1>
+
+{% if cart_items %}
+    <div class="cart-container">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Image</th> <!-- New column for product image -->
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <!-- Display product image -->
+                        <td>
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-image">
+                        </td>
+                        <td>{{ item.product.name }}</td>
+                        <td>Ksh {{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>Ksh {{ item.item_total_price }}</td>  <!-- Display item total price -->
+                        <td>
+                            <a href="{% url 'remove_from_cart' cart_item_id=item.id %}" class="remove-item">Remove</a>
+                        </td>                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <p><strong>Total Price: </strong>Ksh {{ total_price }}</p>
+            <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
+        </div>
+    </div>
+
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}
