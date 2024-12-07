@@ -10,5 +10,11 @@
         {% csrf_token %}
         <button type="submit" class="pay-btn">Pay with MPesa</button>
     </form>
+
+    {% if result %}
+        <div class="payment-result">
+            <p>{{ result }}</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

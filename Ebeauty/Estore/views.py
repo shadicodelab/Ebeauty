@@ -12,6 +12,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .forms import OrderForm
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from django.core.mail import EmailMessage
 
 
 User = get_user_model()
@@ -137,6 +144,8 @@ def checkout(request):
 @csrf_exempt
 @login_required
 def mpesa_payment(request):
+    context = {}
+
     if request.method == 'POST':
         cart = Cart.objects.filter(user=request.user).first()
         if not cart or not cart.cart_items.exists():
@@ -152,9 +161,45 @@ def mpesa_payment(request):
             for item in cart.cart_items.all():
                 order.cart_items.add(item)
             cart.cart_items.all().delete()
-            return redirect('payment_success', order_id=order.id)
 
-    return render(request, 'mpesa_payment.html')
+            # Generate receipt details
+            receipt_message = (
+                f"Receipt for Your Payment\n"
+                f"========================\n"
+                f"Order ID: {order.id}\n"
+                f"Total Price: {total_price}\n"
+                f"User: {request.user.username} ({request.user.email})\n"
+                f"========================\n"
+                f"Thank you for your purchase!\n"
+            )
+
+            # Send email with the receipt
+            try:
+                email_address = request.user.email
+                subject = "Your Payment Receipt"
+                message = (
+                    f"Dear {request.user.username},\n\n"
+                    f"Thank you for your payment. Below is your receipt:\n\n"
+                    f"{receipt_message}"
+                )
+
+                send_mail(
+                    subject,
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    [email_address],
+                    fail_silently=False,
+                )
+
+                context['result'] = "Payment successful! A receipt has been sent to your email."
+
+            except Exception as e:
+                context['result'] = f"Payment successful, but an error occurred while sending the receipt: {e}"
+
+            return render(request, 'mpesa_payment.html', context)
+
+    return render(request, 'mpesa_payment.html', context)
+
 
 
 def place_order(request):
