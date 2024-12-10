@@ -15,9 +15,19 @@
         </form>
     </section>
 
+<<<<<<< HEAD
     <!-- Success/Error Message -->
     {% if result %}
         <div class="result-message">
+=======
+    <form method="POST" class="payment-form">
+        {% csrf_token %}
+        <button type="submit" class="pay-btn">Pay with MPesa</button>
+    </form>
+
+    {% if result %}
+        <div class="payment-result">
+>>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
             <p>{{ result }}</p>
         </div>
     {% endif %}

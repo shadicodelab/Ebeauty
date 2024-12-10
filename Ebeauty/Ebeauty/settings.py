@@ -133,6 +133,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
+<<<<<<< HEAD
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'shadrackkdoi@gmail.com'
@@ -181,6 +182,12 @@ MPESA_INITIATOR_USERNAME = 'testapi'
 
 MPESA_INITIATOR_SECURITY_CREDENTIAL = 'Safaricom999!*!'
 
+=======
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'shadrackkdoi@gmail.com' # Your mail address
+EMAIL_HOST_PASSWORD = 'duyt afdo mots eukg' #Your mail app password
+>>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
