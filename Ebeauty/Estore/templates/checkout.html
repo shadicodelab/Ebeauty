@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="checkout-title">Checkout</h1>
 
-{% if cart.cart_items.exists %}
+{% if cart and cart.cart_items.exists %}
     <div class="checkout-container">
         <table class="checkout-table">
             <thead>
@@ -27,12 +27,12 @@
         </table>
 
         <div class="total-price">
-            <p><strong>Total Price: </strong>Ksh {{ total_price }}</p>
+            <p><strong>Total Price: </strong>Ksh {{ cart.total_price }}</p>
         </div>
 
         <div class="payment-buttons">
-            <a href="{% url 'mpesa_payment' %}" class="proceed-btn">Proceed to Payment</a>
-            <a href="{% url 'place_order' %}" class="place-order-btn">Place Order</a>
+            <!-- Buttons to handle both payment and order placement -->
+            <a href="{% url 'mpesa_payment' %}" class="place-order-btn">Confirm and Place Order</a>
         </div>
     </div>
 {% else %}

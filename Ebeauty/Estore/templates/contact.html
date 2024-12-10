@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Contact Us Section -->
+<section class="contact-us">
+    <div class="container">
+        <!-- Contact Us Title -->
+        <div class="contact-header text-center">
+            <h2>Get in Touch</h2>
+            <p>We'd love to hear from you! Reach out to us for any inquiries or feedback.</p>
+        </div>
+
+        <div class="contact-content">
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <h3>Contact Form</h3>
+                <form method="POST" action="{% url 'contact_us' %}" id="contactForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                <!-- Success or Error Message -->
+                <div id="formResult" class="form-result" style="display: none;"></div>
+            </div>
+
+            <!-- Contact Details -->
+            <div class="contact-details">
+                <h3>Contact Information</h3>
+                <p><strong>Address:</strong> 1234 Street Name, City, Country</p>
+                <p><strong>Phone:</strong> +123 456 7890</p>
+                <p><strong>Email:</strong> contact@yiendafoundation.org</p>
+
+                <!-- Embedded Map -->
+                <div class="map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1051586648076!2d-122.0842499!3d37.4219999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fbc7008cfe6cf%3A0x8bdf09c6be1ec5db!2sGoogleplex!5e0!3m2!1sen!2sus!4v1625264161236!5m2!1sen!2sus" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent default form submission
+        const formData = new FormData(this);
+
+        const response = await fetch("{% url 'contact_us' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+        const resultDiv = document.getElementById('formResult');
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = result.message;
+        resultDiv.style.color = result.success ? 'green' : 'red';
+
+        if (result.success) {
+            this.reset(); // Reset form if submission was successful
+        }
+    });
+</script>
+
+<style>
+/* General Section Styling */
+.contact-us {
+    background-color: #f9f9f9;
+    padding: 50px 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contact-header h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.contact-header p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+/* Contact Content Styling */
+.contact-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.contact-form, .contact-details {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form h3, .contact-details h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+.submit-btn {
+    background-color: #ee5daf;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.submit-btn:hover {
+    background-color: #9d1f73;
+}
+
+/* Contact Details Styling */
+.contact-details p {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.map iframe {
+    border-radius: 10px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-content {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

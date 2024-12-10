@@ -12,7 +12,17 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .forms import OrderForm
 from django.shortcuts import get_object_or_404
-
+from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from io import BytesIO
+from django.http import HttpResponse
+from django.core.mail import EmailMessage
+from django_daraja.mpesa.core import MpesaClient
+from django.http import JsonResponse
+from .forms import OrderForm
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -96,7 +106,13 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
 
+    messages.success(
+        request,
+        f"{cart_item.quantity} x '{product.name}' added to your cart successfully!"
+    )
+
     return redirect('homepage')
+
 
 
 @login_required
@@ -137,45 +153,110 @@ def checkout(request):
 @csrf_exempt
 @login_required
 def mpesa_payment(request):
+    context = {}
+    cart = Cart.objects.filter(user=request.user).first()
+
+    # Ensure the user is logged in
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    # Check if the user's cart is valid
+    if not cart or not cart.cart_items.exists():
+        return redirect('cart')  # Redirect to cart if it's empty
+
     if request.method == 'POST':
-        cart = Cart.objects.filter(user=request.user).first()
-        if not cart or not cart.cart_items.exists():
-            return redirect('cart')
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            # Save delivery details
+            delivery = form.save(commit=False)
+            delivery.user = request.user
+            delivery.save()
 
-        total_price = cart.total_price()
+            # Create a new order
+            order = Order.objects.create(
+                user=request.user,
+                total_price=cart.total_price(),
+                status='pending',
+            )
 
-        # Simulate payment processing
-        payment_successful = True
-
-        if payment_successful:
-            order = Order.objects.create(user=request.user, total_price=total_price, status='paid')
+            # Add cart items to the order
             for item in cart.cart_items.all():
                 order.cart_items.add(item)
+
+            # Prepare item details before clearing the cart
+            item_details = ""
+            for cart_item in order.cart_items.all():
+                item_name = cart_item.product.name  # Product name
+                item_quantity = cart_item.quantity  # Quantity ordered
+                item_price = cart_item.product.price  # Price per item
+                item_total = item_price * item_quantity  # Total for this item
+
+                # Append item details
+                item_details += f" - {item_name} (x{item_quantity}) - Ksh {item_total:.2f}\n"
+
+            # Clear the cart after preparing item details
             cart.cart_items.all().delete()
-            return redirect('payment_success', order_id=order.id)
 
-    return render(request, 'mpesa_payment.html')
+            # Prepare for MPesa STK Push
+            cl = MpesaClient()
+            phone_number = delivery.phone_number
+            amount = int(order.total_price)
+            account_reference = "OrderPayment"
+            transaction_desc = f"Payment for Order #{order.id} by {request.user.username}"
+            callback_url = 'https://api.darajambili.com/express-payment'
 
+            try:
+                # Initiate MPesa STK Push
+                cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
 
-def place_order(request):
-    cart = Cart.objects.filter(user=request.user).first()  # Get the user's cart
-    if cart:
-        if request.method == 'POST':
-            form = OrderForm(request.POST)
-            if form.is_valid():
-                order = form.save(commit=False)  # Save the form without committing yet
-                order.user = request.user  # Set the user who placed the order
-                order.save()  # Save the order to the database
+                # Prepare receipt email
+               # Prepare receipt email for the user and the admin
+                receipt_message = (
+                    f"Dear {delivery.full_name},\n\n"
+                    f"Thank you for your order and payment. Below are the details:\n\n"
+                    f"Order Details:\n"
+                    f"========================\n"
+                    f"Order ID: {order.id}\n"
+                    f"Delivery Location: {delivery.delivery_location}\n\n"
+                    f"Items:\n"
+                    f"{item_details}"
+                    f"========================\n"
+                    f"Total Price: Ksh {order.total_price:.2f}\n"
+                    f"Thank you for shopping with us!\n"
+                    f"We will deliver your order to: {delivery.delivery_location}."
+                )
 
-                # After saving the order, redirect to a confirmation page or another step
-                return redirect('homepage')  # Replace with the URL name you want
+                # Send email to both the user and the admin
+                recipient_list = [request.user.email, settings.EMAIL_HOST_USER]  # Add the admin's email here
+
+                send_mail(
+                    subject="Order Confirmation",
+                    message=receipt_message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=recipient_list,  # Both user and admin will receive the email
+                    fail_silently=False,
+                )
+                context['result'] = "Payment initiated! A confirmation email has been sent to you."
+            except Exception as e:
+                context['result'] = f"Error during payment initiation: {e}"
 
         else:
-            form = OrderForm()  # Show the empty form if the request is GET
-
-        return render(request, 'place_order.html', {'form': form, 'cart': cart})
+            context['result'] = "Invalid delivery details. Please try again."
     else:
-        return redirect('cart')  # Redirect if no cart exists
+        form = OrderForm()
+
+    context.update({
+        'form': form,
+        'cart': cart,
+    })
+    return render(request, 'mpesa_payment.html', context)
+
+
+
+def stk_push_callback(request):
+    data = request.body
+    return HttpResponse("STK push callback received")
+
 
 # Payment Success
 @login_required
@@ -189,3 +270,36 @@ def about(request):
 
 def index(request):
     return render(request, 'index.html')
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        if not (name and email and subject and message):
+            return JsonResponse({'success': False, 'message': 'All fields are required.'})
+
+        # Construct email message
+        full_message = (
+            f"Message from {name} ({email}):\n\n"
+            f"Subject: {subject}\n\n"
+            f"Message:\n{message}"
+        )
+
+        try:
+            # Send email to your email address
+            send_mail(
+                f"New Contact Us Message: {subject}",
+                full_message,
+                settings.EMAIL_HOST_USER,  # Sender email (configured in settings)
+                [settings.EMAIL_HOST_USER],  # Your email address
+                fail_silently=False,
+            )
+            return JsonResponse({'success': True, 'message': 'Your message has been sent successfully!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f"An error occurred: {e}"})
+
+    return render(request, 'contact.html')

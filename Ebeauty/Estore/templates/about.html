@@ -4,7 +4,7 @@
 <section class="about-page">
     <!-- About Us Section -->
     <div class="section about-section">
-        <div class="container">
+        <div class="container text-center">
             <h1>About Us</h1>
             <p>Welcome to Ebeauty – Your one-stop online destination for the best beauty and cosmetic products!</p>
         </div>
@@ -42,7 +42,7 @@
 
     <!-- Statistics Section -->
     <div class="section stats-section">
-        <div class="container">
+        <div class="container text-center">
             <h2>Ebeauty by the Numbers</h2>
             <div class="stats">
                 <div class="stat-item">
@@ -61,4 +61,126 @@
         </div>
     </div>
 </section>
+
+<style>
+/* General Section Styling */
+.about-page .section {
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+}
+
+.about-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Text Centering */
+.text-center {
+    text-align: center;
+}
+
+.about-section h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.about-section p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Vision & Story Section Styling */
+.vision-section, .story-section {
+    background-color: #fff;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.row.reverse {
+    flex-direction: row-reverse;
+}
+
+.col-text, .col-image {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+}
+
+.col-text h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.col-text p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.col-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Statistics Section */
+.stats-section {
+    background-color: #f3f4f6;
+    padding: 40px 20px;
+}
+
+.stats-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+}
+
+.stat-item h3 {
+    font-size: 2rem;
+    color: #be47a4;
+    margin-bottom: 5px;
+}
+
+.stat-item p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+</style>
 {% endblock %}

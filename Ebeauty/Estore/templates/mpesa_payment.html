@@ -2,13 +2,24 @@
 
 {% block content %}
 <div class="payment-container">
-    <h1 class="payment-title">MPesa Payment</h1>
+    <h1 class="payment-title">MPesa Payment & Order Details</h1>
 
-    <p class="payment-description">Please click the button below to complete your payment:</p>
+    <!-- Step 1: Order Delivery Form -->
+    <section class="order-delivery-section">
+        <h2 class="section-title">Order Delivery Details</h2>
+        <form method="POST" action="{% url 'mpesa_payment' %}" class="order-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p class="form-instructions">Provide delivery details to proceed with the payment.</p>
+            <button type="submit" class="form-btn proceed-btn">Proceed to Payment</button>
+        </form>
+    </section>
 
-    <form method="POST" class="payment-form">
-        {% csrf_token %}
-        <button type="submit" class="pay-btn">Pay with MPesa</button>
-    </form>
+    <!-- Success/Error Message -->
+    {% if result %}
+        <div class="result-message">
+            <p>{{ result }}</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -2,58 +2,98 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-color: #f9f9f9;
+    background-color: #f7eeee;
     color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* General Reset for Navbar */
 header {
-    background-color: #1a1a1a;
-    padding: 20px 0;
-    color: #fff;
-    border-bottom: 3px solid #e91e63;
-}
-
-header .logo h1 {
-    margin-left: 20px;
-    font-size: 24px;
-    display: inline-block;
-}
-
-header .nav-links {
-    display: flex;
-    justify-content: flex-end;
-    list-style: none;
-    margin-right: 20px;
-}
-
-header .nav-links li {
-    margin: 0 15px;
-}
-
-header .nav-links i {
-    font-size: 20px; /* adjust size as needed */
-    margin-right: 5px; /* space between icon and text */
-}
-
-
-header .nav-links a {
-    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Navbar Styling */
+  .navbar {
+    padding: 10px 0;
+  }
+  
+  .navbar-brand img {
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-brand img:hover {
+    transform: scale(1.1);
+  }
+  
+  .navbar-nav .nav-link {
+    position: relative;
     text-decoration: none;
-    transition: color 0.3s ease;
+    color: #1c0202;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 10px;
+    transition: color 0.5s ease;
 }
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px; /* Slightly below the link */
+    width: 0;
+    height: 2px;
+    background-color: #ff69b4; /* Pink color */
+    transition: width 0.5s ease;
+}
+.navbar-nav .nav-link:hover::after {
+    width: 100%; /* Full width underline on hover */
+}
+.navbar-nav .nav-link:hover {
+    color: #1abc9c; /* Optional: Change text color on hover */
+}
+    
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 width%3D%2230%22 height%3D%2230%22 fill%3D%22%23333%22 viewBox%3D%220 0 16 16%22%3E%3Cpath fill-rule%3D%22evenodd%22 d%3D%22M1.5 12a.75.75 0 0 1 0-1.5h13a.75.75 0 0 1 0 1.5h-13zm0-5.5a.75.75 0 0 1 0-1.5h13a.75.75 0 0 1 0 1.5h-13zM1.5 3a.75.75 0 0 1 0-1.5h13a.75.75 0 0 1 0 1.5h-13z%22/%3E%3C/svg%3E');
+  }
+    
+  /* Mobile View Adjustments */
+  @media (max-width: 768px) {
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  
+    .navbar-nav {
+      text-align: center;
+    }
+  
+    .navbar-nav .nav-link {
+      margin: 10px 0;
+      padding: 10px;
+    }
+  
+    .navbar-toggler-icon {
+      width: 30px;
+      height: 30px;
+    }
+  }
 
-header .nav-links a:hover {
-    color: #e91e63;
-}
 
 .hero {
-    background: linear-gradient(to right, #e91e63, #ff4081);
+    background: linear-gradient(to right, #f299b7, #ff4081);
     color: #fff;
     text-align: center;
     padding: 80px 20px;
@@ -83,6 +123,7 @@ header .nav-links a:hover {
     background-color: #e91e63;
     color: #fff;
 }
+
 /* product page*/
 .products-section {
     padding: 40px 20px;
@@ -97,11 +138,12 @@ header .nav-links a:hover {
 }
 
 .product-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Adjusts to fit available space */
+    gap: 15px; /* Space between items */
     justify-content: center;
 }
+
 
 /* Remove underline and bold styling for the card link */
 .product-card-link {
@@ -192,6 +234,57 @@ header .nav-links a:hover {
 .product-card .btn:hover {
     background-color: #ff4081;
 }
+
+
+
+
+/* For larger screens, increase the product size */
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr); /* Always show three items per row */
+        gap: 25px;
+    }
+}
+
+/* Adjust product card size for smaller screens */
+.product-card {
+    width: 100%; /* Full width of the grid column */
+    padding: 10px; /* Reduce padding for small screens */
+}
+
+@media (min-width: 768px) {
+    .product-card {
+        padding: 15px; /* Slightly increase padding for medium screens */
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-card {
+        padding: 20px; /* Default padding for larger screens */
+    }
+}
+/* For larger screens (desktop mode) */
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ensure products fit horizontally */
+        gap: 20px; /* Space between products */
+    }
+
+    .product-card {
+        width: 100%; /* Full width of each grid column */
+        padding: 20px; /* Default padding for large screens */
+    }
+}
+
+
+
 
 
 
@@ -443,6 +536,83 @@ header .nav-links a:hover {
     font-size: 16px;
     font-weight: bold;
 }
+/* Mobile Responsiveness: Stack image and details vertically */
+@media (max-width: 768px) {
+    .product-detail-container {
+        display: flex;
+        flex-direction: column;  /* Stack the image and details vertically */
+        align-items: center;     /* Center the content */
+    }
+
+    .product-image {
+        width: 100%;             /* Image takes full width */
+        padding: 20px 10px;      /* Add padding for spacing around the image */
+        box-sizing: border-box;  /* Include padding in the element's total width and height */
+    }
+
+    .product-info {
+        width: 100%;             /* Product info takes full width */
+        text-align: center;      /* Center the content */
+        padding: 20px 10px;      /* Add padding for spacing */
+        margin-top: 40px;        /* Add a consistent 40px space between image and details */
+        box-sizing: border-box;  /* Include padding in the element's total width and height */
+    }
+
+    .product-info h1 {
+        font-size: 24px;         /* Smaller font size for small screens */
+    }
+
+    .product-info .price {
+        font-size: 18px;
+    }
+
+    .product-info .description {
+        font-size: 14px;
+    }
+
+    .product-info .btn {
+        font-size: 16px;
+        padding: 12px 25px;     /* Adjust button size for small screens */
+    }
+}
+
+/* Large screen responsiveness: Image on left, details on right */
+@media (min-width: 769px) {
+    .product-detail-container {
+        display: flex;
+        flex-direction: row;     /* Display image and details side-by-side */
+        align-items: flex-start; /* Align to top */
+    }
+
+    .product-image {
+        width: 40%;              /* Image takes up 40% of the container */
+        padding: 20px;           /* Add padding for spacing */
+    }
+
+    .product-info {
+        width: 60%;              /* Product info takes up 60% */
+        padding: 20px;           /* Add padding for spacing */
+        text-align: left;        /* Align text to the left */
+        margin-top: 20px;        /* Add margin to push the details down */
+    }
+
+    .product-info h1 {
+        font-size: 28px;         /* Larger font size for larger screens */
+    }
+
+    .product-info .price {
+        font-size: 20px;
+    }
+
+    .product-info .description {
+        font-size: 16px;
+    }
+
+    .product-info .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
 
 
 /* Cart Page Styling */
@@ -556,6 +726,75 @@ header .nav-links a:hover {
 }
 
 
+/* Mobile Responsiveness: Make table fit within small screens */
+@media (max-width: 768px) {
+    .cart-table {
+        width: 100%;              /* Ensure the table takes up full width */
+        table-layout: fixed;      /* Fixed layout ensures columns take equal width */
+        border: none;             /* Remove borders between cells to avoid overflow */
+    }
+
+    .cart-table th, .cart-table td {
+        font-size: 12px;          /* Reduce font size for small screens */
+        padding: 8px;             /* Reduce padding for small screens */
+        word-wrap: break-word;    /* Allow words to break and wrap within cells */
+        overflow: hidden;         /* Hide overflow content */
+    }
+
+    .cart-table th {
+        font-size: 14px;          /* Slightly larger font for headers */
+    }
+
+    .cart-container {
+        padding: 15px;            /* Reduce padding for small screens */
+    }
+
+    .cart-summary {
+        font-size: 16px;          /* Adjust font size for small screens */
+    }
+
+    .checkout-btn {
+        font-size: 14px;          /* Adjust button size for small screens */
+        padding: 8px 15px;
+    }
+
+    .remove-item {
+        font-size: 12px;          /* Adjust font size for remove item link */
+    }
+}
+
+/* Desktop Responsiveness: Enhance layout for large screens */
+@media (min-width: 1024px) {
+    .cart-container {
+        max-width: 1200px; /* Increase max width for large screens */
+        padding: 30px;     /* Add more padding for larger screens */
+    }
+
+    .cart-title {
+        font-size: 36px; /* Larger title for large screens */
+    }
+
+    .cart-table th, .cart-table td {
+        font-size: 18px; /* Increase font size for large screens */
+        padding: 12px;   /* Add more padding for readability */
+    }
+
+    .checkout-btn {
+        font-size: 18px; /* Increase font size for large screens */
+        padding: 12px 25px;
+    }
+
+    .product-image {
+        width: 90px; /* Increase image size on large screens */
+        height: 90px;
+    }
+}
+
+
+
+
+
+
 /* General Styles */
 body {
     font-family: 'Arial', sans-serif;
@@ -570,34 +809,54 @@ h1, h2 {
     padding: 0;
 }
 
-/* Order Section Styles */
-.order-section {
+/* Payment Container */
+.payment-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #fcb5cc, #ff4081);
+    background: linear-gradient(135deg, #fcb5cc, #ff4081); /* Gradient theme */
     padding: 20px;
-}
-
-.order-container {
-    background-color: #fff;
-    padding: 40px 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 500px;
     text-align: center;
 }
 
-.order-title {
-    font-size: 28px;
-    color: #e91e63;
-    margin-bottom: 20px;
+/* Title */
+.payment-title {
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 30px;
     font-weight: bold;
     text-transform: capitalize;
 }
 
+/* Order Delivery Form Section */
+.order-delivery-section {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+}
+
+/* Section Title */
+.section-title {
+    font-size: 24px;
+    color: #e91e63;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Form Instructions */
+.form-instructions {
+    font-size: 14px;
+    color: #777;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
 .order-form {
     margin-top: 20px;
 }
@@ -605,13 +864,14 @@ h1, h2 {
 .order-form p {
     margin-bottom: 15px;
     text-align: left;
+    color: #555;
 }
 
 .order-form input,
 .order-form textarea,
 .order-form select {
     width: 100%;
-    padding: 10px 15px;
+    padding: 12px 15px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -627,8 +887,8 @@ h1, h2 {
     box-shadow: 0 0 5px rgba(233, 30, 99, 0.5);
 }
 
-/* Submit Button */
-.place-order-btn {
+/* Button Styles */
+.proceed-btn {
     background-color: #e91e63;
     color: #fff;
     border: none;
@@ -637,33 +897,53 @@ h1, h2 {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    display: inline-block;
     width: 100%;
     text-transform: uppercase;
     font-weight: bold;
 }
 
-.place-order-btn:hover {
+.proceed-btn:hover {
     background-color: #d81b60;
     transform: scale(1.05);
 }
 
-.place-order-btn:active {
+.proceed-btn:active {
     background-color: #c2185b;
     transform: scale(1);
 }
 
+/* Result Message Styles */
+.result-message {
+    margin-top: 30px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-    .order-container {
-        padding: 30px 20px;
+    .payment-container {
+        padding: 10px;
     }
 
-    .order-title {
-        font-size: 24px;
+    .order-delivery-section {
+        padding: 20px;
     }
 
-    .place-order-btn {
+    .payment-title {
+        font-size: 28px;
+    }
+
+    .order-form input,
+    .order-form textarea,
+    .order-form select {
+        font-size: 14px;
+    }
+
+    .proceed-btn {
         font-size: 14px;
         padding: 10px 15px;
     }
