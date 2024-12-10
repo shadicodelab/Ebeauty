@@ -12,28 +12,17 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .forms import OrderForm
 from django.shortcuts import get_object_or_404
-<<<<<<< HEAD
 from django.shortcuts import get_object_or_404
-=======
->>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from io import BytesIO
-<<<<<<< HEAD
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django_daraja.mpesa.core import MpesaClient
 from django.http import JsonResponse
 from .forms import OrderForm
 from django.contrib import messages
-=======
-from reportlab.pdfgen import canvas
-from django.http import HttpResponse
-from django.core.mail import EmailMessage
-
-#git
->>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
 
 User = get_user_model()
 
@@ -165,7 +154,6 @@ def checkout(request):
 @login_required
 def mpesa_payment(request):
     context = {}
-<<<<<<< HEAD
     cart = Cart.objects.filter(user=request.user).first()
 
     # Ensure the user is logged in
@@ -175,8 +163,6 @@ def mpesa_payment(request):
     # Check if the user's cart is valid
     if not cart or not cart.cart_items.exists():
         return redirect('cart')  # Redirect to cart if it's empty
-=======
->>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -211,7 +197,6 @@ def mpesa_payment(request):
             # Clear the cart after preparing item details
             cart.cart_items.all().delete()
 
-<<<<<<< HEAD
             # Prepare for MPesa STK Push
             cl = MpesaClient()
             phone_number = delivery.phone_number
@@ -219,46 +204,6 @@ def mpesa_payment(request):
             account_reference = "OrderPayment"
             transaction_desc = f"Payment for Order #{order.id} by {request.user.username}"
             callback_url = 'https://api.darajambili.com/express-payment'
-=======
-            # Generate receipt details
-            receipt_message = (
-                f"Receipt for Your Payment\n"
-                f"========================\n"
-                f"Order ID: {order.id}\n"
-                f"Total Price: {total_price}\n"
-                f"User: {request.user.username} ({request.user.email})\n"
-                f"========================\n"
-                f"Thank you for your purchase!\n"
-            )
-
-            # Send email with the receipt
-            try:
-                email_address = request.user.email
-                subject = "Your Payment Receipt"
-                message = (
-                    f"Dear {request.user.username},\n\n"
-                    f"Thank you for your payment. Below is your receipt:\n\n"
-                    f"{receipt_message}"
-                )
-
-                send_mail(
-                    subject,
-                    message,
-                    settings.EMAIL_HOST_USER,
-                    [email_address],
-                    fail_silently=False,
-                )
-
-                context['result'] = "Payment successful! A receipt has been sent to your email."
-
-            except Exception as e:
-                context['result'] = f"Payment successful, but an error occurred while sending the receipt: {e}"
-
-            return render(request, 'mpesa_payment.html', context)
-
-    return render(request, 'mpesa_payment.html', context)
-
->>>>>>> 647634e612bff376b22e0935fe8013d94ba3bf7b
 
             try:
                 # Initiate MPesa STK Push
